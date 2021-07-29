@@ -58,7 +58,7 @@ public class BaseController {
 	 * @param request
 	 *            URI or pattern
 	 */
-	@RequestMapping(value = {"", "/"}, method = RequestMethod.GET)
+	@RequestMapping(value = {"","/"}, method = RequestMethod.GET)
 	public ModelAndView showCourses(HttpServletRequest request) {
 
 		String basePath = getBasePath(request);

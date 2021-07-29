@@ -21,7 +21,6 @@
 
 	<properties>
 		<java.version>11</java.version>
-		<mongodb.version>4.3.0</mongodb.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
@@ -38,13 +37,6 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-tomcat</artifactId>
 			<scope>provided</scope>
-		</dependency>
-
-		<!-- The MongoDB Synchronous Driver -->
-		<dependency>
-			<groupId>org.mongodb</groupId>
-			<artifactId>mongodb-driver-sync</artifactId>
-			<version>${mongodb.version}</version><!--$NO-MVN-MAN-VER$-->
 		</dependency>
 
 		<!-- JSTL -->

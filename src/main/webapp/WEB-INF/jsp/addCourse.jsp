@@ -81,13 +81,16 @@ class="tm-edit-product-form" enctype="multipart/form-data" modelAttribute="cours
 						
 						<form:input path="fileInput" id="fileInput" type="file" style="display:none;" />
 							
-						<input type="button" class="btn btn-primary btn-block mx-auto" value="UPLOAD PRODUCT IMAGE" 
+						<input type="button" class="btn btn-primary btn-block mx-auto" value="UPLOAD COURSE IMAGE" 
 						onclick="document.getElementById('fileInput').click();"/>
 							
 						</div>
 					</div>
 					
-					<div class="col-12">
+					<div class="col-6">
+						<a href="/" class="btn btn-primary btn-block text-uppercase mb-3">Cancel</a>
+					</div>
+					<div class="col-6">
 						<button type="submit" class="btn btn-primary btn-block text-uppercase">Add Course Now</button>
 					</div>
 					

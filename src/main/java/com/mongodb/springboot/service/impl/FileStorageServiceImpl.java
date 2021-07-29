@@ -25,12 +25,12 @@ public class FileStorageServiceImpl implements FileStorageService {
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(FileStorageServiceImpl.class);
 
-	@Value("${views.uploadFileLocation}")
+	@Value("${spring.storeFileToLocation}")
 	private String uploadFileLocation;
 
 	private static Path rootLocation;
 
-	@Value("${views.uploadFileLocation}")
+	@Value("${spring.storeFileToLocation}")
 	public void setRootLocation(String uploadFileLocation) {
 		FileStorageServiceImpl.rootLocation = Paths
 				.get(uploadFileLocation.trim());

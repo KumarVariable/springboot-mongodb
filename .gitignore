@@ -1,5 +1,5 @@
 # Ignore local folders to commit.
-images/
+fileStorage/
 
 # Ignore compiled class file
 *.class

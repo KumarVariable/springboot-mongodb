@@ -4,17 +4,17 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@ConfigurationProperties(prefix = "views")
+@ConfigurationProperties(prefix = "spring")
 public class ConfigProperties {
 
-	private String uploadFileLocation;
+	private String storeFileToLocation;
 
-	public String getUploadFileLocation() {
-		return uploadFileLocation;
+	public String getStoreFileToLocation() {
+		return storeFileToLocation;
 	}
 
-	public void setUploadFileLocation(String uploadFileLocation) {
-		this.uploadFileLocation = uploadFileLocation;
+	public void setStoreFileToLocation(String storeFileToLocation) {
+		this.storeFileToLocation = storeFileToLocation;
 	}
 
 }

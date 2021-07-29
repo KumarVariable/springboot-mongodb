@@ -72,13 +72,14 @@
 									</div>
 									
 								</div>
+								
 							</div>
 							<div class="col-xl-6 col-lg-6 col-md-12 mx-auto mb-4">
 							
 								<div class="tm-product-img-edit mx-auto">
 								<c:set var="loc" value="${course.fileName}"></c:set>
-								<!-- img/product-image.jpg -->
-								<img src="images/${loc}" alt="Product image" class="img-fluid d-block mx-auto">
+								
+								<img src="images/${loc}" alt="Course image" class="img-fluid d-block mx-auto">
 								
 								<i class="fas fa-cloud-upload-alt tm-upload-icon" onclick="document.getElementById('fileInput').click();"></i>
 								
@@ -88,13 +89,16 @@
 									
 									<form:input path="fileInput" id="fileInput" type="file" style="display:none;" />
 							
-									<input type="button" class="btn btn-primary btn-block mx-auto" value="UPLOAD PRODUCT IMAGE" 
+									<input type="button" class="btn btn-primary btn-block mx-auto" value="UPLOAD COURSE IMAGE" 
 									onclick="document.getElementById('fileInput').click();"/>
 								</div>
 								
 							</div>
 							
-							<div class="col-12">
+							<div class="col-6">
+								<a href="/" class="btn btn-primary btn-block text-uppercase mb-3">Cancel</a> 
+							</div>
+							<div class="col-6">
 								<button type="submit" class="btn btn-primary btn-block text-uppercase">Update Now</button>
 							</div>
 						</div>
