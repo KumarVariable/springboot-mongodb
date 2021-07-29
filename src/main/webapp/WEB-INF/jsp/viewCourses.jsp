@@ -1,5 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+	
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %> 
 
 <!DOCTYPE html>
 <html lang="en">
@@ -47,7 +50,7 @@
 
 <body>
 
-<form id="viewCourseForm" method="post">
+<form:form id="viewCourseForm" method="POST">
 
 	<!-- Nav Bar Include -->
 	<jsp:include page="navigationBar.jsp" flush="true" />
@@ -61,7 +64,7 @@
 					<input type="hidden" id="hasCourses" value="${hasCourses}" />
 
 					<div class="tm-product-table-container" id="availableCourses"
-						style="display: block;">
+						style="display: none;">
 						<table class="table table-hover tm-table-small tm-product-table">
 
 							<thead>
@@ -78,41 +81,29 @@
 							</thead>
 
 							<tbody>
-								<!-- loop starts <tr> to show products -->
-								<tr>
-									<th scope="row"><input type="checkbox" value="${dummyId}"
-										name="courseId" /></th>
-									<td class="tm-product-name">Java 11</td>
-									<td class="tm-product-name">Kunal</td>
-									<td class="tm-product-name">120</td>
-									<td class="tm-product-name">5</td>
-									<td class="tm-product-name">10000</td>
-									<td class="tm-product-name">28 Nov 2021</td>
-									<td><a href="/editCourse" class="tm-product-edit-link"
-										title="Edit course details"> <i
-											class="fas fa-edit tm-product-edit-icon"></i>
-									</a></td>
-								</tr>
-
+								
+								<c:forEach items="${courseList}" var="courses">
+								<!-- loop starts <tr> to show courses -->
+								
 								<tr>
 									<th scope="row">
-										<input type="checkbox" value="26" name="courseId" />
+										<input type="checkbox" value="${courses.courseId}" name="courseId" />
 									</th>
-									<td class="tm-product-name">Java 12</td>
-									<td class="tm-product-name">Kumar</td>
-									<td class="tm-product-name">10</td>
-									<td class="tm-product-name">10</td>
-									<td class="tm-product-name">40000</td>
-									<td class="tm-product-name">11 Nov 2021</td>
+									<td class="tm-product-name"><c:out value="${courses.courseName}"/></td>
+									<td class="tm-product-name"><c:out value="${courses.trainerName}"/></td>
+									<td class="tm-product-name"><c:out value="${courses.totalSeats}"/></td>
+									<td class="tm-product-name"><c:out value="${courses.duration}"/></td>
+									<td class="tm-product-name"><c:out value="${courses.courseFee}"/></td>
+									<td class="tm-product-name"><c:out value="${courses.startDate}"/></td>
 									<td>
-										<a href="/editCourse" class="tm-product-edit-link" title="Edit course details"> 
+										<a href="/editCourse?id=${courses.courseId}" class="tm-product-edit-link" title="Edit course details"> 
 											<i class="fas fa-edit tm-product-edit-icon"></i>
 										</a>
 									</td>
 								</tr>
 
-
-								<!-- loop ends <tr> to show products -->
+								<!-- loop ends <tr> to show courses -->
+								</c:forEach>
 
 							</tbody>
 
@@ -159,7 +150,7 @@
 		</div>
 	</div>
 
-</form>
+</form:form>
 
 
 <!-- Footer Include -->

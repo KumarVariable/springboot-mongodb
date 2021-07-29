@@ -15,6 +15,7 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -58,16 +59,25 @@ public class BaseController {
 	 * @param request
 	 *            URI or pattern
 	 */
-	@RequestMapping(value = {"","/"}, method = RequestMethod.GET)
+	@RequestMapping(value = {"", "/"}, method = RequestMethod.GET)
 	public ModelAndView showCourses(HttpServletRequest request) {
 
-		String basePath = getBasePath(request);
+		LOGGER.info("Show Courses ");
 
 		ModelAndView model = new ModelAndView();
 
-		model.addObject("basePath", basePath);
-		model.addObject("dummyId", 25);
-		model.addObject("hasCourses", Boolean.TRUE);
+		model.addObject("basePath", getBasePath(request));
+
+		// TODO Integrate business layer
+		List<Course> courseList = getDummyCourseList();
+
+		if (courseList.size() > 0) {
+			model.addObject("hasCourses", Boolean.TRUE);
+			model.addObject("courseList", courseList);
+		} else {
+			model.addObject("hasCourses", Boolean.FALSE);
+		}
+		
 		model.setViewName("viewCourses");
 
 		return model;
@@ -101,7 +111,8 @@ public class BaseController {
 			course.setFileName(fileUploadName);
 
 			String requestParameters = String.format(
-					" <<<-- Request parameters are -->>> %s",course.toString());
+					" <<<-- Request parameters are -->>> %s",
+					course.toString());
 
 			LOGGER.info("Add course with any image  " + requestParameters);
 
@@ -110,7 +121,8 @@ public class BaseController {
 		} else {
 
 			String requestParameters = String.format(
-					" <<<-- Request parameters are -->>> %s",course.toString());
+					" <<<-- Request parameters are -->>> %s",
+					course.toString());
 
 			LOGGER.info("Add course without any image  " + requestParameters);
 
@@ -123,18 +135,19 @@ public class BaseController {
 	}
 
 	@RequestMapping(value = "/editCourse", method = RequestMethod.GET)
-	public ModelAndView editCourse(HttpServletRequest request) {
+	public ModelAndView editCourse(@RequestParam String id) {
+		
+		LOGGER.info("Edit Course For Id = " + id);
 
-		LOGGER.info("Edit Course");
-
-		ModelAndView modelAndView = new ModelAndView();
-
+		//TODO Integrate with business logic
 		Course course = getDummyData();
 		Resource resource = storageService.load(course.getFileName());
 		course.setFileName(resource.getFilename());
 		
+		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.addObject("course", course);
 		modelAndView.setViewName("editCourse");
+		
 		return modelAndView;
 
 	}
@@ -143,6 +156,8 @@ public class BaseController {
 	public ModelAndView editCourse(@ModelAttribute("course") Course course) {
 
 		LOGGER.info("Edit Course to Database");
+		
+		//TODO Business Logic
 
 		ModelAndView modelAndView = new ModelAndView();
 
@@ -156,6 +171,8 @@ public class BaseController {
 	public ModelAndView deleteCourses(HttpServletRequest request) {
 
 		LOGGER.info("Delete Course");
+		
+		//TODO business logic
 		List<String> deleteIdsList = new ArrayList<String>();
 
 		if (!ObjectUtils.isEmpty(request.getParameter("selectedIds"))) {
@@ -217,6 +234,39 @@ public class BaseController {
 		course.setFileName("mongodb-replica-set.png");
 
 		return course;
+
+	}
+
+	public List<Course> getDummyCourseList() {
+
+		List<Course> courseList = new ArrayList<Course>();
+
+		Course course1 = new Course();
+
+		course1.setCourseId("Q0011");
+		course1.setCourseName("Quarkus");
+		course1.setTrainerName("Red Foxman");
+		course1.setDuration(8);
+		course1.setTotalSeats(50);
+		course1.setCourseFee(500);
+		course1.setStartDate(new Date().toString());
+		course1.setFileName("mongodb-replica-set.png");
+
+		Course course2 = new Course();
+
+		course2.setCourseId("G0011");
+		course2.setCourseName("GraalVM");
+		course2.setTrainerName("Frank Finn");
+		course2.setDuration(3);
+		course2.setTotalSeats(20);
+		course2.setCourseFee(5500);
+		course2.setStartDate(new Date().toString());
+		course2.setFileName("K.png");
+
+		courseList.add(course1);
+		courseList.add(course2);
+
+		return courseList;
 
 	}
 
