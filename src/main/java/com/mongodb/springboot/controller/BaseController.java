@@ -250,7 +250,7 @@ public class BaseController {
 		course.setTrainerName("Red Foxman");
 		course.setDuration(8);
 		course.setTotalSeats(50);
-		course.setCourseFee(500);
+		course.setCourseFee(500.00);
 		course.setStartDate(new Date().toString());
 		course.setFileName("mongodb-replica-set.png");
 
@@ -271,7 +271,7 @@ public class BaseController {
 		course1.setTrainerName("Red Foxman");
 		course1.setDuration(8);
 		course1.setTotalSeats(50);
-		course1.setCourseFee(500);
+		course1.setCourseFee(500.00);
 		course1.setStartDate(new Date().toString());
 		course1.setFileName("mongodb-replica-set.png");
 
@@ -282,7 +282,7 @@ public class BaseController {
 		course2.setTrainerName("Frank Finn");
 		course2.setDuration(3);
 		course2.setTotalSeats(20);
-		course2.setCourseFee(5500);
+		course2.setCourseFee(5500.59);
 		course2.setStartDate(new Date().toString());
 		course2.setFileName("K.png");
 

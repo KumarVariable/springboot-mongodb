@@ -14,17 +14,17 @@ public class Course {
 	/**
 	 * Represents the total intakes of student for this course.
 	 */
-	private int totalSeats;
+	private Integer totalSeats;
 
 	/**
 	 * Represents the duration(months) required to complete this course.
 	 */
-	private int duration;
+	private Integer duration;
 
 	/**
 	 * Represents the course fee to enroll for this course.
 	 */
-	private double courseFee;
+	private Double courseFee;
 
 	/**
 	 * course Id available in database.
@@ -60,31 +60,36 @@ public class Course {
 	 * A representation of an uploaded file received in a multipart request.
 	 */
 	private MultipartFile fileInput;
+	
 
-	public int getTotalSeats() {
+	public Integer getTotalSeats() {
 		return totalSeats;
 	}
-	public void setTotalSeats(int totalSeats) {
+
+	public void setTotalSeats(Integer totalSeats) {
 		this.totalSeats = totalSeats;
 	}
 
-	public int getDuration() {
+	public Integer getDuration() {
 		return duration;
 	}
-	public void setDuration(int duration) {
+
+	public void setDuration(Integer duration) {
 		this.duration = duration;
 	}
 
-	public double getCourseFee() {
+	public Double getCourseFee() {
 		return courseFee;
 	}
-	public void setCourseFee(double courseFee) {
+
+	public void setCourseFee(Double courseFee) {
 		this.courseFee = courseFee;
 	}
 
 	public String getCourseId() {
 		return courseId;
 	}
+
 	public void setCourseId(String courseId) {
 		this.courseId = courseId;
 	}
@@ -92,6 +97,7 @@ public class Course {
 	public String getCourseName() {
 		return courseName;
 	}
+
 	public void setCourseName(String courseName) {
 		this.courseName = courseName;
 	}
@@ -99,6 +105,7 @@ public class Course {
 	public String getTrainerName() {
 		return trainerName;
 	}
+
 	public void setTrainerName(String trainerName) {
 		this.trainerName = trainerName;
 	}
@@ -106,6 +113,7 @@ public class Course {
 	public String getStartDate() {
 		return startDate;
 	}
+
 	public void setStartDate(String startDate) {
 		this.startDate = startDate;
 	}
@@ -113,22 +121,25 @@ public class Course {
 	public String getFileName() {
 		return fileName;
 	}
+
 	public void setFileName(String fileName) {
 		this.fileName = fileName;
-	}
-
-	public MultipartFile getFileInput() {
-		return fileInput;
-	}
-	public void setFileInput(MultipartFile fileInput) {
-		this.fileInput = fileInput;
 	}
 
 	public String getLoadFileFromLocation() {
 		return loadFileFromLocation;
 	}
+
 	public void setLoadFileFromLocation(String loadFileFromLocation) {
 		this.loadFileFromLocation = loadFileFromLocation;
+	}
+
+	public MultipartFile getFileInput() {
+		return fileInput;
+	}
+
+	public void setFileInput(MultipartFile fileInput) {
+		this.fileInput = fileInput;
 	}
 
 	@Override
