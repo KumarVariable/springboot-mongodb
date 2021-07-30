@@ -29,6 +29,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.mongodb.springboot.config.properties.ConfigProperties;
+import com.mongodb.springboot.exception.NullRecordsFoundException;
 import com.mongodb.springboot.model.Course;
 import com.mongodb.springboot.service.FileStorageService;
 
@@ -61,6 +62,11 @@ public class BaseController {
 
 		// TODO Integrate business layer
 		List<Course> courseList = getDummyCourseList();
+
+		if (ObjectUtils.isEmpty(courseList)) {
+			throw new NullRecordsFoundException(
+					"Null Records returned by business layer");
+		}
 
 		if (courseList.size() > 0) {
 			model.addObject("hasCourses", Boolean.TRUE);

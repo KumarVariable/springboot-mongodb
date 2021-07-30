@@ -40,9 +40,8 @@
 
 		<h1 class="second-four">1</h1>
 
-		<p class="wrong-para">
-			Oh Snap! Service Not Implemented ! <a href="/">Back to
-				Courses</a> &#128525;
+		<p class="wrong-para">${erroMessage}
+			<a href="/">Back to Courses</a> &#128525;
 		</p>
 	</div>
 

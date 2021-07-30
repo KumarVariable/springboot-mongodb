@@ -71,10 +71,14 @@ public class ApplicationErrorController implements ErrorController {
 				case INTERNAL_SERVER_ERROR :
 
 					errorPage = "500";
+					map.addAttribute("erroMessage",
+							"This is awkward.We are having really a bad day.Our bad.");
 					break;
 
 				default :
 					errorPage = "error";
+					map.addAttribute("erroMessage",
+							"Sorry! Something went wrong.Please try again after some time.");
 					break;
 			}
 
