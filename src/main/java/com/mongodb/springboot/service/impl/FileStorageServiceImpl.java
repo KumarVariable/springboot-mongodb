@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.stream.Stream;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -18,6 +19,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.mongodb.springboot.service.FileStorageService;
+
+/**
+ * Service Implementation for {@link FileStorageService} to handle our file
+ * system for handling files related to storage operations.
+ */
 
 @Service
 public class FileStorageServiceImpl implements FileStorageService {
@@ -36,6 +42,11 @@ public class FileStorageServiceImpl implements FileStorageService {
 				.get(uploadFileLocation.trim());
 	}
 
+	/**
+	 * Method annotated with {@link PostConstruct} will be called only once just
+	 * after initialization of bean properties. Initialize to create file system
+	 * directory so as to handle our system's file management.
+	 */
 	@Override
 	@PostConstruct
 	public void init() {
@@ -49,12 +60,17 @@ public class FileStorageServiceImpl implements FileStorageService {
 		}
 	}
 
+	/**
+	 * @param multipart
+	 *            file to be stored/saved to directory or file system.
+	 * 
+	 */
 	@Override
 	public void save(MultipartFile file) {
 
-		LOGGER.info("uploadFileLocation " + uploadFileLocation);
-		LOGGER.info("rootLocation " + rootLocation);
-
+		LOGGER.info(String.format(
+				"Root Directory Location %s , Upload File location %s",
+				rootLocation, uploadFileLocation));
 		try {
 
 			File destination = new File(uploadFileLocation
@@ -70,6 +86,12 @@ public class FileStorageServiceImpl implements FileStorageService {
 
 	}
 
+	/**
+	 * @param name
+	 *            of file to be loaded/retrieved from directory or file system.
+	 * 
+	 * @return {@link Resource}
+	 */
 	@Override
 	public Resource load(String filename) {
 
@@ -91,6 +113,11 @@ public class FileStorageServiceImpl implements FileStorageService {
 		return null;
 	}
 
+	/**
+	 * Method annotated with {@link PreDestroy} runs only once to inform Spring
+	 * to perform clean up tasks before the bean gets destroyed when the
+	 * container shuts down.
+	 */
 	@Override
 	@PreDestroy
 	public void deleteAll() {
@@ -99,6 +126,16 @@ public class FileStorageServiceImpl implements FileStorageService {
 						+ "once container shutsdown --- >>> ");
 		// FileSystemUtils.deleteRecursively(rootLocation.toFile());
 
+	}
+
+	/**
+	 * load all files from specified directory or file location
+	 * 
+	 */
+	@Override
+	public Stream<Path> loadAll() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

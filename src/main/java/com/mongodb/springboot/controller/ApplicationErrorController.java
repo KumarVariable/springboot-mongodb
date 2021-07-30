@@ -1,7 +1,26 @@
+package com.mongodb.springboot.controller;
+
 /**
  * 
+ * Custom {@link ErrorController} implemented to disable and customize the
+ * default Whitelabel error page for a Spring boot application to show a concise
+ * page/screen that originates from the underlying application container.
+ * 
+ * To disable white label error page entirely. add below property in application
+ * property (application.properties) of Spring boot application.
+ * 
+ * server.error.whitelabel.enabled=false
+ * 
+ * Set below property in application property (application.properties) to return
+ * a custom path to call when an error occurred.
+ * 
+ * server.error.path=/error
+ * 
+ * @author	metanoia
+ * @version	%I%, %G%
+ * @since	1.0
+ *
  */
-package com.mongodb.springboot.controller;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
@@ -15,20 +34,16 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-/**
- * Controller to display custom error pages. Add server.error.path property in
- * application.properties file.
- * 
- * @author metanoia
- *
- */
-
 @Controller
 public class ApplicationErrorController implements ErrorController {
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(ApplicationErrorController.class);
 
+	/*
+	 * Handle the error and return the specific error page for different error
+	 * types.
+	 */
 	@RequestMapping("/error")
 	public String handleError(ModelMap map, HttpServletRequest request) {
 
@@ -51,20 +66,21 @@ public class ApplicationErrorController implements ErrorController {
 				case NOT_FOUND :
 
 					errorPage = "404";
-					return errorPage;
+					break;
 
 				case INTERNAL_SERVER_ERROR :
 
 					errorPage = "500";
-					return errorPage;
+					break;
 
 				default :
+					errorPage = "error";
 					break;
 			}
 
 		}
 
-		return "error";
+		return errorPage;
 	}
 
 }

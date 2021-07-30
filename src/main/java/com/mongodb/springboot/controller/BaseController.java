@@ -1,5 +1,14 @@
 package com.mongodb.springboot.controller;
 
+/**
+ * Base Controller to define all incoming request. Serve respective business
+ * logic for incoming request URIs.
+ * 
+ * @author metanoia
+ * @version %I%, %G%
+ * @since 1.0
+ */
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -23,27 +32,11 @@ import com.mongodb.springboot.config.properties.ConfigProperties;
 import com.mongodb.springboot.model.Course;
 import com.mongodb.springboot.service.FileStorageService;
 
-/**
- * {@summary Base Controller to define all incoming request. URI's to serve
- * corresponding screen to user
- * <ul>
- * <li>This controller will be considered as Base for other controllers.</li>
- * <li>Define global constants,variables in Base Controller only</li>
- * </ul>
- * }
- * 
- * @author metanoia
- * @version 1.0
- */
 @Controller
 public class BaseController {
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(BaseController.class);
-
-	/*
-	 * @Autowired private MongoDBConfiguration mongoConfig;
-	 */
 
 	@Autowired
 	ConfigProperties configProp;
@@ -54,15 +47,13 @@ public class BaseController {
 	String viewName = "";
 
 	/**
-	 * Returns main screen (landing page - About Us).
-	 *
-	 * @param request
-	 *            URI or pattern
+	 * @return the web view of available(Read operation) course(s) in the
+	 *         system.
 	 */
 	@RequestMapping(value = {"", "/"}, method = RequestMethod.GET)
 	public ModelAndView showCourses(HttpServletRequest request) {
 
-		LOGGER.info("Show Courses ");
+		LOGGER.info("View available Courses ");
 
 		ModelAndView model = new ModelAndView();
 
@@ -77,13 +68,16 @@ public class BaseController {
 		} else {
 			model.addObject("hasCourses", Boolean.FALSE);
 		}
-		
+
 		model.setViewName("viewCourses");
 
 		return model;
 
 	}
 
+	/**
+	 * @return the web view to add a new course in the system.
+	 */
 	@RequestMapping(value = "/addCourse", method = RequestMethod.GET)
 	public ModelAndView addCourse(HttpServletRequest request) {
 
@@ -97,10 +91,22 @@ public class BaseController {
 
 	}
 
+	/**
+	 * Method to add new course to the database. Image file for every course
+	 * will be upload/loaded with the help of service {@link FileStorageService}
+	 * 
+	 * @param arguments
+	 *            to be retrieved from the model.In this case model object with
+	 *            form parameters (coming along with POST request) to be
+	 *            inserted to our database.
+	 * 
+	 * @return the success page after add(Insert operation) a new course in the
+	 *         system.
+	 */
 	@RequestMapping(value = "/addCourse", method = RequestMethod.POST)
 	public ModelAndView addCourse(@ModelAttribute("course") Course course) {
 
-		LOGGER.info("Post Course TO Database");
+		LOGGER.info("Add new course tO database");
 
 		ModelAndView modelAndView = new ModelAndView();
 
@@ -134,30 +140,49 @@ public class BaseController {
 
 	}
 
+	/**
+	 * @param courseId
+	 *            of the course to edit.
+	 * 
+	 * @return the web view to edit course information for the selected course.
+	 */
 	@RequestMapping(value = "/editCourse", method = RequestMethod.GET)
 	public ModelAndView editCourse(@RequestParam String id) {
-		
+
 		LOGGER.info("Edit Course For Id = " + id);
 
-		//TODO Integrate with business logic
+		// TODO Integrate with business logic
 		Course course = getDummyData();
 		Resource resource = storageService.load(course.getFileName());
 		course.setFileName(resource.getFilename());
-		
+
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.addObject("course", course);
 		modelAndView.setViewName("editCourse");
-		
+
 		return modelAndView;
 
 	}
 
+	/**
+	 * Method to edit information for selected course into the database. Image
+	 * file for every course will be upload/loaded with the help of service
+	 * {@link FileStorageService}
+	 * 
+	 * @param arguments
+	 *            to be retrieved from the model.In this case model object with
+	 *            form parameters (coming along with POST request) to be updated
+	 *            with new information for the selected course id.
+	 * 
+	 * @return the success page after edit(Update operation) for selected course
+	 *         in the system.
+	 */
 	@RequestMapping(value = "/editCourse", method = RequestMethod.POST)
 	public ModelAndView editCourse(@ModelAttribute("course") Course course) {
 
 		LOGGER.info("Edit Course to Database");
-		
-		//TODO Business Logic
+
+		// TODO Business Logic
 
 		ModelAndView modelAndView = new ModelAndView();
 
@@ -167,12 +192,24 @@ public class BaseController {
 
 	}
 
+	/**
+	 * Method to delete record(s) for selected course(s) from the database.
+	 * Image file for every course will be removed from directory to store
+	 * images too with the help of service {@link FileStorageService}
+	 * 
+	 * @param an
+	 *            array of selected id(s) of course(s) to be removed from
+	 *            database.
+	 * 
+	 * @return the success page after removing(Delete operation) records of
+	 *         selected course(s)
+	 */
 	@RequestMapping(value = "/deleteCourses", method = RequestMethod.POST)
 	public ModelAndView deleteCourses(HttpServletRequest request) {
 
 		LOGGER.info("Delete Course");
-		
-		//TODO business logic
+
+		// TODO business logic
 		List<String> deleteIdsList = new ArrayList<String>();
 
 		if (!ObjectUtils.isEmpty(request.getParameter("selectedIds"))) {
@@ -203,24 +240,8 @@ public class BaseController {
 		return basePath;
 	}
 
-	/*
-	 * @GetMapping("/hello/**") public String testMongoDBConnectio() {
-	 * 
-	 * List<String> databases = new ArrayList<String>();
-	 * 
-	 * MongoClient client = mongoConfig.getMongoClient();
-	 * 
-	 * MongoIterable<String> databasesList = client.listDatabaseNames();
-	 * 
-	 * Iterator<String> iterator = databasesList.iterator();
-	 * 
-	 * while (iterator.hasNext()) { databases.add(iterator.next()); }
-	 * 
-	 * LOGGER.info("Current Available Databases" + databases);
-	 * 
-	 * return "hello"; }
-	 */
-
+	// TODO To be removed later with real time database interaction to fetch
+	// selected records
 	public Course getDummyData() {
 		Course course = new Course();
 
@@ -237,6 +258,8 @@ public class BaseController {
 
 	}
 
+	// TODO To be removed later with real time database interaction to fetch
+	// all available records.
 	public List<Course> getDummyCourseList() {
 
 		List<Course> courseList = new ArrayList<Course>();
