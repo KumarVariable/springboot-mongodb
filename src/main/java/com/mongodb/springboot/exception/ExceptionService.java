@@ -1,4 +1,4 @@
-package com.mongodb.springboot.service;
+package com.mongodb.springboot.exception;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -7,8 +7,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.ModelAndView;
-
-import com.mongodb.springboot.exception.NullRecordsFoundException;
 
 @ControllerAdvice
 public class ExceptionService {
@@ -26,6 +24,22 @@ public class ExceptionService {
 
 		modelAndView.addObject("erroMessage",
 				"Sorry! Something went wrong.Please try again after some time.");
+		modelAndView.setViewName("500");
+
+		return modelAndView;
+
+	}
+	
+	@ExceptionHandler(FileStorageException.class)
+	public ModelAndView handleFileStorageException(
+			FileStorageException fileStorageException, HttpServletRequest request) {
+
+		LOGGER.error("Request: " + request.getRequestURL() + " raised " + fileStorageException);
+
+		ModelAndView modelAndView = new ModelAndView();
+
+		modelAndView.addObject("erroMessage",
+				"This is awkward.We are having really a bad day.Our bad.");
 		modelAndView.setViewName("500");
 
 		return modelAndView;

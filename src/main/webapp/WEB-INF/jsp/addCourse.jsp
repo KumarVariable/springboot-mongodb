@@ -9,50 +9,11 @@
 <!-- Header Include -->
 <jsp:include page="header.jsp" flush="true" />
 
-<script type="text/javascript">
-	function validateUpload() {
-		const MAX_UPLOAD_SIZE = document.getElementById("maxUploadSize").value; 
-		var filePath = document.getElementById("fileInput").value;
-
-		// Allowed file type
-		var allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i;
-
-		if (filePath) {
-			
-			// Validate upload file extension
-			if (!allowedExtensions.exec(filePath)) {
-				alert('Invalid File type.Supported file types - [ *.jpeg / *.jpg / *.png ]');
-				fileInput.value = '';
-				event.preventDefault();
-
-			} else {
-				
-				// Validate size of upload file (in MB)
-				var fileUpload = document.getElementById("fileInput");
-				var fileSize = parseFloat(fileUpload.files[0].size / (1024 * 1024)).toFixed(2);
-				
-				if (fileSize > MAX_UPLOAD_SIZE) {
-					alert("File must not exceed 2 MB !");
-					fileUpload.value = '';
-					event.preventDefault();
-				} else {
-					document.getElementById("addCourse").action = "/addCourse";
-				}
-
-			}
-
-		} else {
-			// No File Selected to upload
-			document.getElementById("addCourse").action = "/addCourse";
-		}
-
-	}
-</script>
-
+<script src="js/formValidation.js"></script>
 <body>
 
 <form:form id="addCourse" method="POST" class="tm-edit-product-form" enctype="multipart/form-data" 
-modelAttribute="course" onsubmit="validateUpload()"> <!-- action="/addCourse"  -->
+modelAttribute="course" onsubmit="validateUpload()">
 
 	<!-- Nav Bar Include -->
 	<jsp:include page="navigationBar.jsp" flush="true" />
@@ -72,12 +33,14 @@ modelAttribute="course" onsubmit="validateUpload()"> <!-- action="/addCourse"  -
 						
 							<div class="form-group mb-3">
 								<form:label path="courseName">Course Name</form:label>
-								<form:input path="courseName" class="form-control validate" required="required" />
+								<form:input path="courseName" class="form-control validate" required="required" 
+								onkeypress="return allowAlphanumeric(event);" maxlength="15" />
 							</div>
 							
 							<div class="form-group mb-3">
 								<form:label path="trainerName">Trainer Name</form:label>
-								<form:input path="trainerName" class="form-control validate" required="required" />
+								<form:input path="trainerName" class="form-control validate" required="required" 
+								onkeypress="return allowAlphabets(event);" maxlength="15" />
 							</div>
 							
 							<div class="form-group mb-3">
@@ -102,11 +65,13 @@ modelAttribute="course" onsubmit="validateUpload()"> <!-- action="/addCourse"  -
 								</div>
 								<div class="form-group mb-3 col-xs-12 col-sm-3">
 									<form:label path="totalSeats">Seats</form:label>
-									<form:input path="totalSeats" class="form-control validate" required="required" />
+									<form:input path="totalSeats" class="form-control validate" required="required" 
+									onkeypress="return allowNumeric(event);" maxlength="3" />
 								</div>
 								<div class="form-group mb-3 col-xs-12 col-sm-4">
 									<form:label path="courseFee">Course Fee </form:label>
-									<form:input path="courseFee" class="form-control validate" required="required" />
+									<form:input path="courseFee" class="form-control validate" required="required" 
+									onkeypress="return allowDecimalNumbers(event);" />
 								</div>
 							</div>
 							
