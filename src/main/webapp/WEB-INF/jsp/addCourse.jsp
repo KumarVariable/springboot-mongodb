@@ -23,6 +23,7 @@
 			if (!allowedExtensions.exec(filePath)) {
 				alert('Invalid File type.Supported file types - [ *.jpeg / *.jpg / *.png ]');
 				fileInput.value = '';
+				event.preventDefault();
 
 			} else {
 				
@@ -35,14 +36,14 @@
 					fileUpload.value = '';
 					event.preventDefault();
 				} else {
-					document.getElementById("viewCourseForm").action = "/addCourse";
+					document.getElementById("addCourse").action = "/addCourse";
 				}
 
 			}
 
 		} else {
 			// No File Selected to upload
-			document.getElementById("viewCourseForm").action = "/addCourse";
+			document.getElementById("addCourse").action = "/addCourse";
 		}
 
 	}

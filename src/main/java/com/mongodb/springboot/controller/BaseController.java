@@ -59,7 +59,7 @@ public class BaseController {
 		ModelAndView model = new ModelAndView();
 
 		model.addObject("basePath", getBasePath(request));
-		
+
 		// TODO Integrate business layer
 		List<Course> courseList = getDummyCourseList();
 
@@ -92,7 +92,8 @@ public class BaseController {
 		ModelAndView modelAndView = new ModelAndView();
 
 		modelAndView.addObject("course", new Course());
-		modelAndView.addObject("maxUploadSize", configProp.getMaxSizeFileUpload());
+		modelAndView.addObject("maxUploadSize",
+				configProp.getMaxSizeFileUpload());
 		modelAndView.setViewName("addCourse");
 		return modelAndView;
 
@@ -143,8 +144,8 @@ public class BaseController {
 
 		viewName = "200";
 		modelAndView.setViewName(viewName);
-		//return modelAndView;
-		
+		// return modelAndView;
+
 		return "redirect:/";
 
 	}
@@ -167,7 +168,8 @@ public class BaseController {
 
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.addObject("course", course);
-		modelAndView.addObject("maxUploadSize", configProp.getMaxSizeFileUpload());
+		modelAndView.addObject("maxUploadSize",
+				configProp.getMaxSizeFileUpload());
 		modelAndView.setViewName("editCourse");
 
 		return modelAndView;
