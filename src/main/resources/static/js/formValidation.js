@@ -1,5 +1,5 @@
 function validateUpload(callerName) {
-	alert(callerName);
+	//alert(callerName);
 
 	const MAX_UPLOAD_SIZE = document.getElementById("maxUploadSize").value;
 	var filePath = document.getElementById("fileInput").value;
