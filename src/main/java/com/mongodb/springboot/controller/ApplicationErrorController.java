@@ -66,6 +66,7 @@ public class ApplicationErrorController implements ErrorController {
 				case NOT_FOUND :
 
 					errorPage = "404";
+					map.addAttribute("erroMessage", "Uh Oh! Page not found!");
 					break;
 
 				case INTERNAL_SERVER_ERROR :

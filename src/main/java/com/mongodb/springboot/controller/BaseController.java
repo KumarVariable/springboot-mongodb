@@ -110,7 +110,7 @@ public class BaseController {
 	 *         system.
 	 */
 	@RequestMapping(value = "/addCourse", method = RequestMethod.POST)
-	public ModelAndView addCourse(@ModelAttribute("course") Course course) {
+	public String addCourse(@ModelAttribute("course") Course course) {
 
 		LOGGER.info("Add new course tO database");
 
@@ -126,7 +126,7 @@ public class BaseController {
 					" <<<-- Request parameters are -->>> %s",
 					course.toString());
 
-			LOGGER.info("Add course with any image  " + requestParameters);
+			LOGGER.info("Add course with image  " + requestParameters);
 
 			storageService.save(course.getFileInput());
 
@@ -142,7 +142,9 @@ public class BaseController {
 
 		viewName = "200";
 		modelAndView.setViewName(viewName);
-		return modelAndView;
+		//return modelAndView;
+		
+		return "redirect:/";
 
 	}
 
@@ -184,7 +186,7 @@ public class BaseController {
 	 *         in the system.
 	 */
 	@RequestMapping(value = "/editCourse", method = RequestMethod.POST)
-	public ModelAndView editCourse(@ModelAttribute("course") Course course) {
+	public String editCourse(@ModelAttribute("course") Course course) {
 
 		LOGGER.info("Edit Course to Database");
 
@@ -194,7 +196,7 @@ public class BaseController {
 
 		modelAndView.addObject("course", getDummyData());
 		modelAndView.setViewName("editCourse");
-		return modelAndView;
+		return "redirect:/";
 
 	}
 

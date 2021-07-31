@@ -38,9 +38,6 @@
 			</div>
 		</div>
 
-
-		<!-- <p class="wrong-para">This is awkward.We are having really a bad
-			day.Our bad. &#128542;</p> -->
 		<p class="wrong-para">${erroMessage} &#128542;</p>
 	</div>
 

@@ -40,7 +40,7 @@
 		<h1 class="second-four">4</h1>
 
 		<p class="wrong-para">
-			Uh Oh! Page not found! <a href="/">Back to courses</a>&#128525;
+			${erroMessage} <a href="/">Back to courses</a>&#128525;
 		</p>
 	</div>
 
