@@ -27,6 +27,8 @@ import org.springframework.context.annotation.Configuration;
 public class ConfigProperties {
 
 	private String storeFileToLocation;
+	
+	private String maxSizeFileUpload;
 
 	public String getStoreFileToLocation() {
 		return storeFileToLocation;
@@ -34,6 +36,14 @@ public class ConfigProperties {
 
 	public void setStoreFileToLocation(String storeFileToLocation) {
 		this.storeFileToLocation = storeFileToLocation;
+	}
+	
+	public String getMaxSizeFileUpload() {
+		return maxSizeFileUpload;
+	}
+
+	public void setMaxSizeFileUpload(String maxSizeFileUpload) {
+		this.maxSizeFileUpload = maxSizeFileUpload;
 	}
 
 }
