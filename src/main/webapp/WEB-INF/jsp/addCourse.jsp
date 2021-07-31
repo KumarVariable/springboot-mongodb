@@ -9,11 +9,13 @@
 <!-- Header Include -->
 <jsp:include page="header.jsp" flush="true" />
 
+<!-- Form Validation -->
 <script src="js/formValidation.js"></script>
+
 <body>
 
 <form:form id="addCourse" method="POST" class="tm-edit-product-form" enctype="multipart/form-data" 
-modelAttribute="course" onsubmit="validateUpload()">
+modelAttribute="course" onsubmit="validateUpload('addCourse')">
 
 	<!-- Nav Bar Include -->
 	<jsp:include page="navigationBar.jsp" flush="true" />

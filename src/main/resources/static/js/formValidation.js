@@ -1,4 +1,6 @@
-function validateUpload() {
+function validateUpload(callerName) {
+	alert(callerName);
+
 	const MAX_UPLOAD_SIZE = document.getElementById("maxUploadSize").value;
 	var filePath = document.getElementById("fileInput").value;
 
@@ -24,14 +26,14 @@ function validateUpload() {
 				fileUpload.value = '';
 				event.preventDefault();
 			} else {
-				document.getElementById("addCourse").action = "/addCourse";
+				document.getElementById(callerName).action = "/" + callerName;
 			}
 
 		}
 
 	} else {
 		// No File Selected to upload
-		document.getElementById("addCourse").action = "/addCourse";
+		document.getElementById(callerName).action = "/" + callerName;
 	}
 
 }

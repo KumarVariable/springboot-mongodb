@@ -10,50 +10,13 @@
 <!-- Header Include -->
 <jsp:include page="header.jsp" flush="true" />
 
-<script type="text/javascript">
-	function validateUpload() {
-		const MAX_UPLOAD_SIZE = document.getElementById("maxUploadSize").value; 
-		var filePath = document.getElementById("fileInput").value;
-
-		// Allowed file type
-		var allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i;
-
-		if (filePath) {
-			
-			// Validate upload file extension
-			if (!allowedExtensions.exec(filePath)) {
-				alert('Invalid File type.Supported file types - [ *.jpeg / *.jpg / *.png ]');
-				fileInput.value = '';
-				event.preventDefault();
-
-			} else {
-				
-				// Validate size of upload file (in MB)
-				var fileUpload = document.getElementById("fileInput");
-				var fileSize = parseFloat(fileUpload.files[0].size / (1024 * 1024)).toFixed(2);
-				
-				if (fileSize > MAX_UPLOAD_SIZE) {
-					alert("File must not exceed 2 MB !");
-					fileUpload.value = '';
-					event.preventDefault();
-				} else {
-					document.getElementById("editCourse").action = "/editCourse";
-				}
-
-			}
-
-		} else {
-			// No File Selected to upload
-			document.getElementById("editCourse").action = "/editCourse";
-		}
-
-	}
-</script>
+<!-- Form Validation -->
+<script src="js/formValidation.js"></script>
 
 <body>
 
 <form:form id="editCourse" method="POST"
-	class="tm-edit-product-form" enctype="multipart/form-data" modelAttribute="course" onsubmit="validateUpload()">
+	class="tm-edit-product-form" enctype="multipart/form-data" modelAttribute="course" onsubmit="validateUpload('editCourse')">
 
 <!-- Nav Bar Include -->
 <jsp:include page="navigationBar.jsp" flush="true" />
@@ -73,7 +36,7 @@
 
 						<div class="form-group mb-3">
 							<form:label path="courseName">Course Name </form:label>
-				<form:input path="courseName" class="form-control validate" />
+							<form:input path="courseName" class="form-control validate" />
 			</div>
 
 			<div class="form-group mb-3">
