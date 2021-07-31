@@ -97,7 +97,7 @@ modelAttribute="course" onsubmit="validateUpload('addCourse')">
 					</div>
 					
 					<div class="col-6">
-						<a href="/" class="btn btn-primary btn-block text-uppercase mb-3">Cancel</a>
+						<a href="/" class="btn btn-primary btn-block text-uppercase mb-3">Abort</a>
 					</div>
 					<div class="col-6">
 						<button type="submit" class="btn btn-primary btn-block text-uppercase">Add Course Now</button>

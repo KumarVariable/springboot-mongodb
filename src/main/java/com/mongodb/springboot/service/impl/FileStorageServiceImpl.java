@@ -18,6 +18,7 @@ import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.mongodb.springboot.exception.FileStorageException;
 import com.mongodb.springboot.service.FileStorageService;
 
 /**
@@ -80,8 +81,12 @@ public class FileStorageServiceImpl implements FileStorageService {
 
 		} catch (IllegalStateException e) {
 			LOGGER.error("IllegalStateException -->>> ", e);
-		} catch (IOException e) {
-			LOGGER.error("IOException -->>> ", e);
+		} catch (IOException ioException) {
+			String ioExceptionFormat = String.format(
+					"Could not save image file: %s %s",
+					file.getOriginalFilename().trim(), ioException);
+			throw new FileStorageException(ioExceptionFormat);
+
 		}
 
 	}
@@ -103,11 +108,14 @@ public class FileStorageServiceImpl implements FileStorageService {
 			if (resource.exists() || resource.isReadable()) {
 				return resource;
 			} else {
-				throw new RuntimeException("Could not read the file!");
+				LOGGER.info(String.format(
+						"Could not load image file Or Image unavailable in source location: %s",
+						filename));
+				return resource;
 			}
 
-		} catch (MalformedURLException e) {
-			LOGGER.error("MalformedURLException -->>> ", e);
+		} catch (MalformedURLException malformedURLException) {
+			LOGGER.error("MalformedURLException -->>> ", malformedURLException);
 		}
 
 		return null;

@@ -112,15 +112,16 @@ public class BaseController {
 	 *         system.
 	 */
 	@RequestMapping(value = "/addCourse", method = RequestMethod.POST)
-	public String addCourse(@ModelAttribute("course") Course course) {
+	public ModelAndView addCourse(@ModelAttribute("course") Course course) {
 
-		LOGGER.info("Add new course tO database");
+		LOGGER.info("Add new course to database");
+		String fileUploadName = "";
 
 		ModelAndView modelAndView = new ModelAndView();
 
 		if (!ObjectUtils.isEmpty(course.getFileInput().getOriginalFilename())) {
 
-			String fileUploadName = course.getFileInput().getOriginalFilename();
+			fileUploadName = course.getFileInput().getOriginalFilename();
 
 			course.setFileName(fileUploadName);
 
@@ -132,6 +133,10 @@ public class BaseController {
 
 			storageService.save(course.getFileInput());
 
+			// TODO Database interaction
+			// TO Get Id for newly added course from Database.
+			String dummyId = "A111";
+
 		} else {
 
 			String requestParameters = String.format(
@@ -139,14 +144,13 @@ public class BaseController {
 					course.toString());
 
 			LOGGER.info("Add course without any image  " + requestParameters);
+			course.setFileName("");
 
 		}
 
-		viewName = "200";
+		viewName = "editCourse";
 		modelAndView.setViewName(viewName);
-		// return modelAndView;
-
-		return "redirect:/";
+		return modelAndView;
 
 	}
 
@@ -164,7 +168,12 @@ public class BaseController {
 		// TODO Integrate with business logic
 		Course course = getDummyData();
 		Resource resource = storageService.load(course.getFileName());
-		course.setFileName(resource.getFilename());
+
+		if (!ObjectUtils.isEmpty(resource.getFilename())) {
+			course.setFileName(resource.getFilename());
+		} else {
+			course.setFileName("");
+		}
 
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.addObject("course", course);
@@ -190,17 +199,32 @@ public class BaseController {
 	 *         in the system.
 	 */
 	@RequestMapping(value = "/editCourse", method = RequestMethod.POST)
-	public String editCourse(@ModelAttribute("course") Course course) {
+	public ModelAndView editCourse(@ModelAttribute("course") Course course) {
 
 		LOGGER.info("Edit Course to Database");
 
+		// TODO change below code as per database interaction
+		Course updatedCourse = getDummyData();
+
 		// TODO Business Logic
+
+		if (!ObjectUtils.isEmpty(course.getFileInput().getOriginalFilename())) {
+
+			String fileUploadName = course.getFileInput().getOriginalFilename();
+			course.setFileName(fileUploadName);
+
+			LOGGER.info("Update course information with image  ");
+
+			storageService.save(course.getFileInput());
+			updatedCourse.setFileName(fileUploadName);
+
+		}
 
 		ModelAndView modelAndView = new ModelAndView();
 
-		modelAndView.addObject("course", getDummyData());
+		modelAndView.addObject("course", updatedCourse);
 		modelAndView.setViewName("editCourse");
-		return "redirect:/";
+		return modelAndView;
 
 	}
 
