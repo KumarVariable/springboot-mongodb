@@ -7,12 +7,12 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.5.2</version>
+		<version>3.2.5</version>
 	</parent>
 
 	<groupId>com.mongodb.springboot</groupId>
 	<artifactId>springboot-mongodb</artifactId>
-	<packaging>war</packaging>
+	<packaging>jar</packaging>
 	<name>Spring Boot With Mongo DB</name>
 	<description>Spring Boot With Mongo DB</description>
 	<url></url>
@@ -20,7 +20,7 @@
 
 
 	<properties>
-		<java.version>11</java.version>
+		<java.version>21</java.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
@@ -32,39 +32,16 @@
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 
-		<!-- Web with Tomcat + Embed -->
+		<!-- Thymeleaf -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-tomcat</artifactId>
-			<scope>provided</scope>
+			<artifactId>spring-boot-starter-thymeleaf</artifactId>
 		</dependency>
 
-		<!-- JSTL -->
+		<!-- MongoDB -->
 		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>jstl</artifactId>
-		</dependency>
-
-		<!-- Need this to compile JSP -->
-		<dependency>
-			<groupId>org.apache.tomcat.embed</groupId>
-			<artifactId>tomcat-embed-jasper</artifactId>
-			<scope>provided</scope>
-		</dependency>
-
-		<!-- Need this to compile JSP -->
-		<dependency>
-			<groupId>org.eclipse.jdt.core.compiler</groupId>
-			<artifactId>ecj</artifactId>
-			<version>4.6.1</version>
-			<scope>provided</scope>
-		</dependency>
-
-		<!-- Optional, for bootstrap -->
-		<dependency>
-			<groupId>org.webjars</groupId>
-			<artifactId>bootstrap</artifactId>
-			<version>3.3.7</version>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-mongodb</artifactId>
 		</dependency>
 
 		<dependency>
@@ -75,7 +52,7 @@
 	</dependencies>
 	<build>
 		<plugins>
-			<!-- Package as an executable jar/war -->
+			<!-- Package as an executable jar -->
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
@@ -88,7 +65,6 @@
 					<release>${java.version}</release>
 				</configuration>
 			</plugin>
-
 
 		</plugins>
 	</build>

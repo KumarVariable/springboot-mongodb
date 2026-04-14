@@ -7,8 +7,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.stream.Stream;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.PreDestroy;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,11 +20,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.mongodb.springboot.exception.FileStorageException;
 import com.mongodb.springboot.service.FileStorageService;
-
-/**
- * Service Implementation for {@link FileStorageService} to handle our file
- * system for handling files related to storage operations.
- */
 
 @Service
 public class FileStorageServiceImpl implements FileStorageService {
@@ -43,42 +38,25 @@ public class FileStorageServiceImpl implements FileStorageService {
 				.get(uploadFileLocation.trim());
 	}
 
-	/**
-	 * Method annotated with {@link PostConstruct} will be called only once just
-	 * after initialization of bean properties. Initialize to create file system
-	 * directory so as to handle our system's file management.
-	 */
 	@Override
 	@PostConstruct
 	public void init() {
-
 		try {
 			LOGGER.info("<<< --- Uncomment code to create \"images\" directory "
 					+ "through boot application --- >>> ");
-			// Files.createDirectories(rootLocation);
 		} catch (Exception e) {
 			LOGGER.error("Could not initialize storage location -->>> ", e);
 		}
 	}
 
-	/**
-	 * @param multipart
-	 *            file to be stored/saved to directory or file system.
-	 * 
-	 */
 	@Override
 	public void save(MultipartFile file) {
-
-		LOGGER.info(String.format(
-				"Root Directory Location %s , Upload File location %s",
-				rootLocation, uploadFileLocation));
+		LOGGER.info("Root Directory Location {} , Upload File location {}",
+				rootLocation, uploadFileLocation);
 		try {
-
 			File destination = new File(uploadFileLocation
 					.concat(file.getOriginalFilename().trim()));
-
 			file.transferTo(destination);
-
 		} catch (IllegalStateException e) {
 			LOGGER.error("IllegalStateException -->>> ", e);
 		} catch (IOException ioException) {
@@ -86,34 +64,22 @@ public class FileStorageServiceImpl implements FileStorageService {
 					"Could not save image file: %s %s",
 					file.getOriginalFilename().trim(), ioException);
 			throw new FileStorageException(ioExceptionFormat);
-
 		}
-
 	}
 
-	/**
-	 * @param name
-	 *            of file to be loaded/retrieved from directory or file system.
-	 * 
-	 * @return {@link Resource}
-	 */
 	@Override
 	public Resource load(String filename) {
-
 		try {
-
 			Path filePath = rootLocation.resolve(filename);
 			Resource resource = new UrlResource(filePath.toUri());
 
 			if (resource.exists() || resource.isReadable()) {
 				return resource;
 			} else {
-				LOGGER.info(String.format(
-						"Could not load image file Or Image unavailable in source location: %s",
-						filename));
+				LOGGER.info("Could not load image file Or Image unavailable in source location: {}",
+						filename);
 				return resource;
 			}
-
 		} catch (MalformedURLException malformedURLException) {
 			LOGGER.error("MalformedURLException -->>> ", malformedURLException);
 		}
@@ -121,28 +87,15 @@ public class FileStorageServiceImpl implements FileStorageService {
 		return null;
 	}
 
-	/**
-	 * Method annotated with {@link PreDestroy} runs only once to inform Spring
-	 * to perform clean up tasks before the bean gets destroyed when the
-	 * container shuts down.
-	 */
 	@Override
 	@PreDestroy
 	public void deleteAll() {
-		LOGGER.info(
-				"<<< --- Uncomment code if want to delete \"images\" directory "
-						+ "once container shutsdown --- >>> ");
-		// FileSystemUtils.deleteRecursively(rootLocation.toFile());
-
+		LOGGER.info("<<< --- Uncomment code if want to delete \"images\" directory "
+				+ "once container shuts down --- >>> ");
 	}
 
-	/**
-	 * load all files from specified directory or file location
-	 * 
-	 */
 	@Override
 	public Stream<Path> loadAll() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

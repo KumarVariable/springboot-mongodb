@@ -1,36 +1,24 @@
 package com.mongodb.springboot.controller;
 
-/**
- * Base Controller to define all incoming request. Serve respective business
- * logic for incoming request URIs.
- * 
- * @author metanoia
- * @version %I%, %G%
- * @since 1.0
- */
-
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.util.ObjectUtils;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.mongodb.springboot.config.properties.ConfigProperties;
-import com.mongodb.springboot.exception.NullRecordsFoundException;
 import com.mongodb.springboot.model.Course;
+import com.mongodb.springboot.service.CourseService;
 import com.mongodb.springboot.service.FileStorageService;
 
 @Controller
@@ -45,288 +33,118 @@ public class BaseController {
 	@Autowired
 	FileStorageService storageService;
 
-	String viewName = "";
+	@Autowired
+	CourseService courseService;
 
-	/**
-	 * @return the web view of available(Read operation) course(s) in the
-	 *         system.
-	 */
-	@RequestMapping(value = {"", "/"}, method = RequestMethod.GET)
-	public ModelAndView showCourses(HttpServletRequest request) {
+	@GetMapping({"", "/"})
+	public String showCourses(Model model) {
+		LOGGER.info("View available Courses");
 
-		LOGGER.info("View available Courses ");
+		List<Course> courseList = courseService.findAll();
 
-		ModelAndView model = new ModelAndView();
-
-		model.addObject("basePath", getBasePath(request));
-
-		// TODO Integrate business layer
-		List<Course> courseList = getDummyCourseList();
-
-		if (ObjectUtils.isEmpty(courseList)) {
-			throw new NullRecordsFoundException(
-					"Null Records returned by business layer");
-		}
-
-		if (courseList.size() > 0) {
-			model.addObject("hasCourses", Boolean.TRUE);
-			model.addObject("courseList", courseList);
+		if (courseList != null && !courseList.isEmpty()) {
+			model.addAttribute("hasCourses", true);
+			model.addAttribute("courseList", courseList);
 		} else {
-			model.addObject("hasCourses", Boolean.FALSE);
+			model.addAttribute("hasCourses", false);
 		}
 
-		model.setViewName("viewCourses");
-
-		return model;
-
+		return "viewCourses";
 	}
 
-	/**
-	 * @return the web view to add a new course in the system.
-	 */
-	@RequestMapping(value = "/addCourse", method = RequestMethod.GET)
-	public ModelAndView addCourse(HttpServletRequest request) {
-
+	@GetMapping("/addCourse")
+	public String addCourse(Model model) {
 		LOGGER.info("Get Add Course");
 
-		ModelAndView modelAndView = new ModelAndView();
-
-		modelAndView.addObject("course", new Course());
-		modelAndView.addObject("maxUploadSize",
-				configProp.getMaxSizeFileUpload());
-		modelAndView.setViewName("addCourse");
-		return modelAndView;
-
+		model.addAttribute("course", new Course());
+		model.addAttribute("maxUploadSize", configProp.getMaxSizeFileUpload());
+		return "addCourse";
 	}
 
-	/**
-	 * Method to add new course to the database. Image file for every course
-	 * will be upload/loaded with the help of service {@link FileStorageService}
-	 * 
-	 * @param arguments
-	 *            to be retrieved from the model.In this case model object with
-	 *            form parameters (coming along with POST request) to be
-	 *            inserted to our database.
-	 * 
-	 * @return the success page after add(Insert operation) a new course in the
-	 *         system.
-	 */
-	@RequestMapping(value = "/addCourse", method = RequestMethod.POST)
-	public ModelAndView addCourse(@ModelAttribute("course") Course course) {
-
+	@PostMapping("/addCourse")
+	public String addCourse(@ModelAttribute("course") Course course, Model model) {
 		LOGGER.info("Add new course to database");
-		String fileUploadName = "";
 
-		ModelAndView modelAndView = new ModelAndView();
-
-		if (!ObjectUtils.isEmpty(course.getFileInput().getOriginalFilename())) {
-
-			fileUploadName = course.getFileInput().getOriginalFilename();
-
-			course.setFileName(fileUploadName);
-
-			String requestParameters = String.format(
-					" <<<-- Request parameters are -->>> %s",
-					course.toString());
-
-			LOGGER.info("Add course with image  " + requestParameters);
-
-			storageService.save(course.getFileInput());
-
-			// TODO Database interaction
-			// TO Get Id for newly added course from Database.
-			String dummyId = "A111";
-
-		} else {
-
-			String requestParameters = String.format(
-					" <<<-- Request parameters are -->>> %s",
-					course.toString());
-
-			LOGGER.info("Add course without any image  " + requestParameters);
-			course.setFileName("");
-
-		}
-
-		viewName = "editCourse";
-		modelAndView.setViewName(viewName);
-		return modelAndView;
-
-	}
-
-	/**
-	 * @param courseId
-	 *            of the course to edit.
-	 * 
-	 * @return the web view to edit course information for the selected course.
-	 */
-	@RequestMapping(value = "/editCourse", method = RequestMethod.GET)
-	public ModelAndView editCourse(@RequestParam String id) {
-
-		LOGGER.info("Edit Course For Id = " + id);
-
-		// TODO Integrate with business logic
-		Course course = getDummyData();
-		Resource resource = storageService.load(course.getFileName());
-
-		if (!ObjectUtils.isEmpty(resource.getFilename())) {
-			course.setFileName(resource.getFilename());
-		} else {
-			course.setFileName("");
-		}
-
-		ModelAndView modelAndView = new ModelAndView();
-		modelAndView.addObject("course", course);
-		modelAndView.addObject("maxUploadSize",
-				configProp.getMaxSizeFileUpload());
-		modelAndView.setViewName("editCourse");
-
-		return modelAndView;
-
-	}
-
-	/**
-	 * Method to edit information for selected course into the database. Image
-	 * file for every course will be upload/loaded with the help of service
-	 * {@link FileStorageService}
-	 * 
-	 * @param arguments
-	 *            to be retrieved from the model.In this case model object with
-	 *            form parameters (coming along with POST request) to be updated
-	 *            with new information for the selected course id.
-	 * 
-	 * @return the success page after edit(Update operation) for selected course
-	 *         in the system.
-	 */
-	@RequestMapping(value = "/editCourse", method = RequestMethod.POST)
-	public ModelAndView editCourse(@ModelAttribute("course") Course course) {
-
-		LOGGER.info("Edit Course to Database");
-
-		// TODO change below code as per database interaction
-		Course updatedCourse = getDummyData();
-
-		// TODO Business Logic
-
-		if (!ObjectUtils.isEmpty(course.getFileInput().getOriginalFilename())) {
+		if (!ObjectUtils.isEmpty(course.getFileInput())
+				&& !ObjectUtils.isEmpty(course.getFileInput().getOriginalFilename())
+				&& !course.getFileInput().getOriginalFilename().isEmpty()) {
 
 			String fileUploadName = course.getFileInput().getOriginalFilename();
 			course.setFileName(fileUploadName);
 
-			LOGGER.info("Update course information with image  ");
-
+			LOGGER.info("Add course with image: {}", course);
 			storageService.save(course.getFileInput());
-			updatedCourse.setFileName(fileUploadName);
-
+		} else {
+			LOGGER.info("Add course without any image: {}", course);
+			course.setFileName("");
 		}
 
-		ModelAndView modelAndView = new ModelAndView();
-
-		modelAndView.addObject("course", updatedCourse);
-		modelAndView.setViewName("editCourse");
-		return modelAndView;
-
+		Course savedCourse = courseService.save(course);
+		model.addAttribute("course", savedCourse);
+		model.addAttribute("maxUploadSize", configProp.getMaxSizeFileUpload());
+		return "editCourse";
 	}
 
-	/**
-	 * Method to delete record(s) for selected course(s) from the database.
-	 * Image file for every course will be removed from directory to store
-	 * images too with the help of service {@link FileStorageService}
-	 * 
-	 * @param an
-	 *            array of selected id(s) of course(s) to be removed from
-	 *            database.
-	 * 
-	 * @return the success page after removing(Delete operation) records of
-	 *         selected course(s)
-	 */
-	@RequestMapping(value = "/deleteCourses", method = RequestMethod.POST)
-	public ModelAndView deleteCourses(HttpServletRequest request) {
+	@GetMapping("/editCourse")
+	public String editCourse(@RequestParam String id, Model model) {
+		LOGGER.info("Edit Course For Id = {}", id);
 
-		LOGGER.info("Delete Course");
+		Course course = courseService.findById(id);
 
-		// TODO business logic
-		List<String> deleteIdsList = new ArrayList<String>();
-
-		if (!ObjectUtils.isEmpty(request.getParameter("selectedIds"))) {
-			String[] selectedIds = request.getParameter("selectedIds")
-					.split(",");
-
-			for (String ids : selectedIds) {
-				deleteIdsList.add(ids);
+		if (course != null && course.getFileName() != null) {
+			try {
+				storageService.load(course.getFileName());
+			} catch (Exception e) {
+				course.setFileName("");
 			}
 		}
 
-		LOGGER.info(String.format("Delete following records %s",
-				deleteIdsList.toString()));
-
-		ModelAndView modelAndView = new ModelAndView();
-		modelAndView.setViewName("200");
-		return modelAndView;
-
+		model.addAttribute("course", course);
+		model.addAttribute("maxUploadSize", configProp.getMaxSizeFileUpload());
+		return "editCourse";
 	}
 
-	public String getBasePath(HttpServletRequest request) {
+	@PostMapping("/editCourse")
+	public String editCourse(@ModelAttribute("course") Course course, Model model) {
+		LOGGER.info("Edit Course to Database");
 
-		String basePath = ServletUriComponentsBuilder.fromRequestUri(request)
-				.replacePath(null).build().toUriString();
+		Course existingCourse = courseService.findById(course.getCourseId());
 
-		basePath = basePath.concat("/");
-		request.getSession().setAttribute("basePath", basePath);
-		return basePath;
+		if (!ObjectUtils.isEmpty(course.getFileInput())
+				&& !ObjectUtils.isEmpty(course.getFileInput().getOriginalFilename())
+				&& !course.getFileInput().getOriginalFilename().isEmpty()) {
+
+			String fileUploadName = course.getFileInput().getOriginalFilename();
+			course.setFileName(fileUploadName);
+			LOGGER.info("Update course information with image");
+			storageService.save(course.getFileInput());
+		} else if (existingCourse != null) {
+			course.setFileName(existingCourse.getFileName());
+		}
+
+		Course updatedCourse = courseService.save(course);
+		model.addAttribute("course", updatedCourse);
+		model.addAttribute("maxUploadSize", configProp.getMaxSizeFileUpload());
+		return "editCourse";
 	}
 
-	// TODO To be removed later with real time database interaction to fetch
-	// selected records
-	public Course getDummyData() {
-		Course course = new Course();
+	@PostMapping("/deleteCourses")
+	public String deleteCourses(HttpServletRequest request) {
+		LOGGER.info("Delete Course");
 
-		course.setCourseId("Q0011");
-		course.setCourseName("Quarkus");
-		course.setTrainerName("Red Foxman");
-		course.setDuration(8);
-		course.setTotalSeats(50);
-		course.setCourseFee(500.00);
-		course.setStartDate(new Date().toString());
-		course.setFileName("mongodb-replica-set.png");
+		List<String> deleteIdsList = new ArrayList<>();
 
-		return course;
+		if (!ObjectUtils.isEmpty(request.getParameter("selectedIds"))) {
+			String[] selectedIds = request.getParameter("selectedIds").split(",");
+			for (String id : selectedIds) {
+				deleteIdsList.add(id);
+			}
+		}
 
-	}
+		LOGGER.info("Delete following records {}", deleteIdsList);
+		courseService.deleteAllById(deleteIdsList);
 
-	// TODO To be removed later with real time database interaction to fetch
-	// all available records.
-	public List<Course> getDummyCourseList() {
-
-		List<Course> courseList = new ArrayList<Course>();
-
-		Course course1 = new Course();
-
-		course1.setCourseId("Q0011");
-		course1.setCourseName("Quarkus");
-		course1.setTrainerName("Red Foxman");
-		course1.setDuration(8);
-		course1.setTotalSeats(50);
-		course1.setCourseFee(500.00);
-		course1.setStartDate(new Date().toString());
-		course1.setFileName("mongodb-replica-set.png");
-
-		Course course2 = new Course();
-
-		course2.setCourseId("G0011");
-		course2.setCourseName("GraalVM");
-		course2.setTrainerName("Frank Finn");
-		course2.setDuration(3);
-		course2.setTotalSeats(20);
-		course2.setCourseFee(5500.59);
-		course2.setStartDate(new Date().toString());
-		course2.setFileName("K.png");
-
-		courseList.add(course1);
-		courseList.add(course2);
-
-		return courseList;
-
+		return "200";
 	}
 
 }

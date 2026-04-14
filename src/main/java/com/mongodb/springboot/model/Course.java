@@ -1,90 +1,34 @@
 package com.mongodb.springboot.model;
 
-/** 
- * Represents a course.
- * @author metanoia
- * @version %I%, %G%
- * @since 1.0
-*/
-
+import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
+import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.web.multipart.MultipartFile;
 
+@Document(collection = "courses")
 public class Course {
 
-	/**
-	 * Represents the total intakes of student for this course.
-	 */
-	private Integer totalSeats;
-
-	/**
-	 * Represents the duration(months) required to complete this course.
-	 */
-	private Integer duration;
-
-	/**
-	 * Represents the course fee to enroll for this course.
-	 */
-	private Double courseFee;
-
-	/**
-	 * course Id available in database.
-	 */
+	@Id
 	private String courseId;
 
-	/**
-	 * name of course.
-	 */
 	private String courseName;
 
-	/**
-	 * name of trainer for the course.
-	 */
 	private String trainerName;
 
-	/**
-	 * start date of the course.
-	 */
+	private Integer totalSeats;
+
+	private Integer duration;
+
+	private Double courseFee;
+
 	private String startDate;
 
-	/**
-	 * full name of file(image file with extension) of the course.
-	 */
 	private String fileName;
 
-	/**
-	 * directory,file path of the image of course to be read/load
-	 */
 	private String loadFileFromLocation;
 
-	/**
-	 * A representation of an uploaded file received in a multipart request.
-	 */
+	@Transient
 	private MultipartFile fileInput;
-	
-
-	public Integer getTotalSeats() {
-		return totalSeats;
-	}
-
-	public void setTotalSeats(Integer totalSeats) {
-		this.totalSeats = totalSeats;
-	}
-
-	public Integer getDuration() {
-		return duration;
-	}
-
-	public void setDuration(Integer duration) {
-		this.duration = duration;
-	}
-
-	public Double getCourseFee() {
-		return courseFee;
-	}
-
-	public void setCourseFee(Double courseFee) {
-		this.courseFee = courseFee;
-	}
 
 	public String getCourseId() {
 		return courseId;
@@ -108,6 +52,30 @@ public class Course {
 
 	public void setTrainerName(String trainerName) {
 		this.trainerName = trainerName;
+	}
+
+	public Integer getTotalSeats() {
+		return totalSeats;
+	}
+
+	public void setTotalSeats(Integer totalSeats) {
+		this.totalSeats = totalSeats;
+	}
+
+	public Integer getDuration() {
+		return duration;
+	}
+
+	public void setDuration(Integer duration) {
+		this.duration = duration;
+	}
+
+	public Double getCourseFee() {
+		return courseFee;
+	}
+
+	public void setCourseFee(Double courseFee) {
+		this.courseFee = courseFee;
 	}
 
 	public String getStartDate() {
@@ -144,12 +112,10 @@ public class Course {
 
 	@Override
 	public String toString() {
-		return "Course [totalSeats=" + totalSeats + ", duration=" + duration
-				+ ", courseFee=" + courseFee + ", courseId=" + courseId
-				+ ", courseName=" + courseName + ", trainerName=" + trainerName
-				+ ", startDate=" + startDate + ", fileName=" + fileName
-				+ ", loadFileFromLocation=" + loadFileFromLocation
-				+ ", fileInput=" + fileInput + "]";
+		return "Course [courseId=" + courseId + ", courseName=" + courseName
+				+ ", trainerName=" + trainerName + ", totalSeats=" + totalSeats
+				+ ", duration=" + duration + ", courseFee=" + courseFee
+				+ ", startDate=" + startDate + ", fileName=" + fileName + "]";
 	}
 
 }

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments/header :: header}"></head>
+
+<script th:src="@{/js/formValidation.js}"></script>
+
+<body>
+
+<form id="addCourse" method="POST" th:action="@{/addCourse}" th:object="${course}"
+      class="tm-edit-product-form" enctype="multipart/form-data" onsubmit="validateUpload('addCourse')">
+
+    <nav th:replace="~{fragments/navigationBar :: navigationBar}"></nav>
+    <input type="hidden" id="maxUploadSize" th:value="${maxUploadSize}">
+
+    <div class="container tm-mt-big tm-mb-big">
+        <div class="row">
+            <div class="col-xl-9 col-lg-10 col-md-12 col-sm-12 mx-auto">
+                <div class="tm-bg-primary-dark tm-block tm-block-h-auto">
+                    <div class="row">
+                        <div class="col-12">
+                            <h2 class="tm-block-title d-inline-block">Add Course</h2>
+                        </div>
+                    </div>
+                    <div class="row tm-edit-product-row">
+                        <div class="col-xl-6 col-lg-6 col-md-12">
+
+                            <div class="form-group mb-3">
+                                <label for="courseName">Course Name</label>
+                                <input type="text" id="courseName" th:field="*{courseName}" class="form-control validate"
+                                       required="required" onkeypress="return allowAlphanumeric(event);" maxlength="15" />
+                            </div>
+
+                            <div class="form-group mb-3">
+                                <label for="trainerName">Trainer Name</label>
+                                <input type="text" id="trainerName" th:field="*{trainerName}" class="form-control validate"
+                                       required="required" onkeypress="return allowAlphabets(event);" maxlength="15" />
+                            </div>
+
+                            <div class="form-group mb-3">
+                                <label for="duration">Duration</label>
+                                <select id="duration" th:field="*{duration}" class="form-select tm-select-accounts">
+                                    <option value="-1">Select months</option>
+                                    <option value="2">2 Months</option>
+                                    <option value="4">4 Months</option>
+                                    <option value="6">6 Months</option>
+                                    <option value="8">8 Months</option>
+                                    <option value="10">10 Months</option>
+                                    <option value="12">12 Months</option>
+                                </select>
+                            </div>
+
+                            <div class="row">
+                                <div class="form-group mb-3 col-xs-12 col-sm-5">
+                                    <label for="startDate">Start Date</label>
+                                    <input type="text" id="startDate" th:field="*{startDate}" class="form-control validate"
+                                           data-large-mode="true" />
+                                </div>
+                                <div class="form-group mb-3 col-xs-12 col-sm-3">
+                                    <label for="totalSeats">Seats</label>
+                                    <input type="text" id="totalSeats" th:field="*{totalSeats}" class="form-control validate"
+                                           required="required" onkeypress="return allowNumeric(event);" maxlength="3" />
+                                </div>
+                                <div class="form-group mb-3 col-xs-12 col-sm-4">
+                                    <label for="courseFee">Course Fee</label>
+                                    <input type="text" id="courseFee" th:field="*{courseFee}" class="form-control validate"
+                                           required="required" onkeypress="return allowDecimalNumbers(event);" />
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="col-xl-6 col-lg-6 col-md-12 mx-auto mb-4">
+                            <div class="tm-product-img-dummy mx-auto">
+                                <img th:src="@{/img/file-upload.jpg}" alt="Course image"
+                                     class="img-fluid d-block mx-auto" onclick="document.getElementById('fileInput').click();">
+                            </div>
+
+                            <div class="custom-file mt-3 mb-3">
+                                <input type="file" id="fileInput" name="fileInput" style="display:none;" />
+                                <input type="button" class="btn btn-primary btn-block mx-auto" value="UPLOAD COURSE IMAGE"
+                                       onclick="document.getElementById('fileInput').click();"/>
+                            </div>
+                        </div>
+
+                        <div class="col-6">
+                            <a href="/" class="btn btn-primary btn-block text-uppercase mb-3">Abort</a>
+                        </div>
+                        <div class="col-6">
+                            <button type="submit" class="btn btn-primary btn-block text-uppercase">Add Course Now</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</form>
+
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+<div th:replace="~{fragments/jsLibraries :: jsLibraries}"></div>
+
+</body>
+</html>
