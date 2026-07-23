@@ -1,0 +1,14 @@
+{
+  "servers": {
+    "BitoAIArchitect": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "mcp-remote",
+        "http://localhost:5001/mcp",
+        "--header",
+        "Authorization: Bearer tX1/Nm12EPcQCbfLHUt8ZGZSJFTy8ikSGr087Xvcyjo="
+      ]
+    }
+  }
+}
