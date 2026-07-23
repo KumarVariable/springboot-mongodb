@@ -42,8 +42,8 @@ public class JwtTokenProvider {
 				.setSubject(username)
 				.claim("role", role)
 				.setIssuedAt(new java.util.Date())
-				.setExpiration(new java.util.Date(System.currentTimeMillis() + jwtExpiration))
-				.signWith(key, SignatureAlgorithm.HS512)
+			.setExpiration(new java.util.Date(System.currentTimeMillis() + jwtExpiration))
+			.signWith(key, SignatureAlgorithm.HS256)
 				.compact();
 	}
 
