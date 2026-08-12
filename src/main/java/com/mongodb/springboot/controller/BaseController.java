@@ -136,8 +136,6 @@ public class BaseController {
 
 		if (!ObjectUtils.isEmpty(request.getParameter("selectedIds"))) {
 			String[] selectedIds = request.getParameter("selectedIds").split(",");
-			for (String id : selectedIds) {
-				deleteIdsList.add(id);
 			}
 		}
 
